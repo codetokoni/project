@@ -11,25 +11,33 @@ void main() {
     expect(navBar, findsOneWidget);
 
     expect(find.text('Home'), findsOneWidget);
-    expect(find.text('Search'), findsOneWidget);
-    expect(find.text('Profile'), findsOneWidget);
+    expect(find.text('Explore'), findsOneWidget);
+    expect(find.text('About'), findsOneWidget);
+  });
 
-    // Default screen shows welcome message
-    expect(find.text('Welcome Home'), findsOneWidget);
+  testWidgets('Home screen shows FALF TV hero banner', (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+
+    expect(find.text('Experience Africa'), findsOneWidget);
+    expect(find.text('Authentic Stories. Real Voices.'), findsOneWidget);
+    expect(find.text('Watch Now'), findsOneWidget);
+    expect(find.text('Featured Content'), findsOneWidget);
+    expect(find.text('Trending Now'), findsOneWidget);
   });
 
   testWidgets('Tapping nav items switches tabs', (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
 
-    // Home tab is shown by default
-    expect(find.text('Welcome Home'), findsOneWidget);
-
-    // Tap Search tab
-    await tester.tap(find.text('Search'));
+    // Tap Explore tab
+    await tester.tap(find.text('Explore'));
     await tester.pump();
+    expect(find.text('Categories'), findsOneWidget);
+    expect(find.text('Documentaries'), findsOneWidget);
 
-    // Tap Profile tab
-    await tester.tap(find.text('Profile'));
+    // Tap About tab
+    await tester.tap(find.text('About'));
     await tester.pump();
+    expect(find.text('FALF TV'), findsAtLeast(1));
+    expect(find.text('admin@falftv.com'), findsOneWidget);
   });
 }
