@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"C:\\\\Users\\\\victo\\\\src\\\\flutter\\\\bin\\\\flutter.bat\" test)",
+      "Bash(\"C:\\\\Users\\\\victo\\\\src\\\\flutter\\\\bin\\\\flutter.bat\" analyze)",
+      "Bash(git init:*)"
+    ]
+  }
+}
