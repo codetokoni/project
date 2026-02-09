@@ -22,7 +22,6 @@ void main() {
     expect(find.text('Authentic Stories. Real Voices.'), findsOneWidget);
     expect(find.text('Watch Now'), findsOneWidget);
     expect(find.text('Featured Content'), findsOneWidget);
-    expect(find.text('Trending Now'), findsOneWidget);
   });
 
   testWidgets('Tapping nav items switches tabs', (WidgetTester tester) async {

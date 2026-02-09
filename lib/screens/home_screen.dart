@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -39,19 +41,21 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      padding: EdgeInsets.zero,
       children: [
         _buildHeroBanner(context),
         _buildSectionTitle(context, 'Featured Content'),
-        _buildContentRow(_featuredContent),
+        _buildContentGrid(context, _featuredContent),
         _buildSectionTitle(context, 'Trending Now'),
-        _buildContentRow(_featuredContent.reversed.toList()),
+        _buildContentGrid(context, _featuredContent.reversed.toList()),
+        const SizedBox(height: 24),
       ],
     );
   }
 
   Widget _buildHeroBanner(BuildContext context) {
     return Container(
-      height: 220,
+      height: 340,
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: NetworkImage(
@@ -62,41 +66,63 @@ class HomeScreen extends StatelessWidget {
       ),
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+          gradient: RadialGradient(
+            center: Alignment.center,
+            radius: 1.0,
             colors: [
-              Colors.black.withValues(alpha: 0.3),
-              Colors.black.withValues(alpha: 0.8),
+              Colors.black.withValues(alpha: 0.4),
+              Colors.black.withValues(alpha: 0.75),
             ],
           ),
         ),
-        padding: const EdgeInsets.all(24),
-        alignment: Alignment.bottomLeft,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Experience Africa',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Authentic Stories. Real Voices.',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(color: Colors.white70),
+            const Text(
+              'FALF TV',
+              style: TextStyle(
+                color: kGold,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 3,
+              ),
             ),
             const SizedBox(height: 12),
+            ShaderMask(
+              shaderCallback: (bounds) => const LinearGradient(
+                colors: [Colors.white, kGold],
+              ).createShader(bounds),
+              child: const Text(
+                'Experience Africa',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                  height: 1.1,
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Authentic Stories. Real Voices.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white.withValues(alpha: 0.9),
+                letterSpacing: 1,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+            const SizedBox(height: 24),
             FilledButton.icon(
               onPressed: () {},
               icon: const Icon(Icons.play_arrow),
-              label: const Text('Watch Now'),
+              label: const Text(
+                'Watch Now',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
             ),
           ],
         ),
@@ -106,81 +132,132 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildSectionTitle(BuildContext context, String title) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
-      child: Text(
-        title,
-        style: Theme.of(context)
-            .textTheme
-            .titleLarge
-            ?.copyWith(fontWeight: FontWeight.bold),
+      padding: const EdgeInsets.fromLTRB(16, 28, 16, 12),
+      child: Row(
+        children: [
+          Container(
+            width: 4,
+            height: 22,
+            decoration: BoxDecoration(
+              color: kGold,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildContentRow(List<_ContentItem> items) {
+  Widget _buildContentGrid(BuildContext context, List<_ContentItem> items) {
     return SizedBox(
-      height: 180,
+      height: 200,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         itemCount: items.length,
-        itemBuilder: (context, index) {
-          final item = items[index];
-          return _buildContentCard(context, item);
-        },
+        itemBuilder: (context, index) => _buildContentCard(context, items[index]),
       ),
     );
   }
 
   Widget _buildContentCard(BuildContext context, _ContentItem item) {
     return Container(
-      width: 160,
-      margin: const EdgeInsets.symmetric(horizontal: 4),
+      width: 170,
+      margin: const EdgeInsets.symmetric(horizontal: 6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(12),
             child: Stack(
               children: [
                 Image.network(
                   item.imageUrl,
-                  height: 100,
-                  width: 160,
+                  height: 130,
+                  width: 170,
                   fit: BoxFit.cover,
                   errorBuilder: (_, _, _) => Container(
-                    height: 100,
-                    width: 160,
-                    color: Colors.grey.shade800,
-                    child: const Icon(Icons.movie, color: Colors.white54, size: 40),
+                    height: 130,
+                    width: 170,
+                    color: kSurfaceDark,
+                    child: const Icon(Icons.movie, color: Colors.white24, size: 40),
                   ),
                 ),
-                Positioned(
-                  bottom: 4,
-                  right: 4,
+                // Dark gradient overlay at bottom
+                Positioned.fill(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
-                      color: Colors.black87,
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withValues(alpha: 0.5),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                // Duration badge
+                Positioned(
+                  bottom: 6,
+                  right: 6,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.8),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
                       item.duration,
-                      style: const TextStyle(color: Colors.white, fontSize: 11),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+                // Play icon overlay
+                Positioned.fill(
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: kGold.withValues(alpha: 0.9),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.play_arrow,
+                        color: Colors.black,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Text(
             item.title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),
